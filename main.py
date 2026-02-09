@@ -31,6 +31,7 @@ def main(dosage_period = 0):
 
     ##### Establish objects
     devices = create_objects()
+    #### Assign objects
     green_led = devices[0]
     red_led = devices[1]
     buzzer = devices[2]
