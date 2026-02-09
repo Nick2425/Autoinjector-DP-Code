@@ -7,7 +7,7 @@ RPM = 80 # revolutions per minute
 TIME = 5
 SPEED = 0.5
 
-def gate(motor: Motor, open = True):
+def open(motor: Motor, open = True):
     if open == True:
         motor.forward(speed=SPEED)
         time.sleep(TIME)

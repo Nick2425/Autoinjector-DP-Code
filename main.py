@@ -1,9 +1,13 @@
+import create_objects
+import time
+import gate
+
 LOOP_DELAY = 0.05
 FORCE_THRESHOLD = 0
 HOLD_TIME = 3
 
 def main(dosage_period = 0):
-
+    
     ### Each return statement after main ensures that main() won't be called continuously.
     ###### INPUT INFORMATION BY DOCTOR ########
     if dosage_period == 0:
@@ -25,5 +29,53 @@ def main(dosage_period = 0):
         return 0
     print("Success!")
 
+    ##### Establish objects
+    devices = create_objects()
+    green_led = devices[0]
+    red_led = devices[1]
+    buzzer = devices[2]
+    dc_motor = devices[3]
+    actuator = devices[4]
+    button_sensor = devices[5]
+    #### Establish initial doses
+    doses_administered = 0
+    while doses_administered < dosage_count:
+        gate_open = False
+        green_led.on()
 
-main()
+
+        ########### While the gate isn't --- program halts until the button is pressed and gate opens
+        while gate_open == False:
+            time.sleep(LOOP_DELAY) ### reduces cpu load on pi
+            # Check the force sensor
+            try:
+                if button_sensor.force > FORCE_THRESHOLD:
+                    gate_open = True
+                    green_led.off()
+                    gate.open(dc_motor, open=True)
+            except:
+                print("Error opening the gate")
+
+
+        ###### Begin calculating the rolling average of FSRS
+        ## Incorporate rolling average code here.
+
+
+
+
+
+        ##### Begin injection
+        ##### Incorporate rolling average code here
+
+
+
+
+        ##### Grace period after injection
+        time.sleep(5)
+        ##### Close the gate
+        gate.open(dc_motor, open=False)
+        doses_administered += 1
+        time.sleep(dosage_period) ### Waits for dosage period.
+
+    #### End of autoinjector use - needs refill now.
+    return 0
