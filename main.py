@@ -4,6 +4,7 @@ HOLD_TIME = 3
 
 def main(dosage_period = 0):
 
+    ### Each return statement after main ensures that main() won't be called continuously.
     ###### INPUT INFORMATION BY DOCTOR ########
     if dosage_period == 0:
         try: ### CHECK TYPE OF INPUT

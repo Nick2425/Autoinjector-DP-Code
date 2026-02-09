@@ -17,5 +17,3 @@ def gate(motor: Motor, open = True):
         time.sleep(TIME)
         motor.stop()
 
-
-shit = []
