@@ -74,8 +74,13 @@ def main(dosage_period = 0):
         ##### Grace period after injection
         time.sleep(5)
         ##### Close the gate
-        gate.open(dc_motor, open=False)
+        try:
+            gate.open(dc_motor, open=False)
+        except:
+            print("Error closing the gate")
+        ### Finishing the dose administration
         doses_administered += 1
+        red_led.on()
         time.sleep(dosage_period) ### Waits for dosage period.
 
     #### End of autoinjector use - needs refill now.
