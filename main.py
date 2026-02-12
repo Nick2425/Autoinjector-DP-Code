@@ -6,6 +6,8 @@ LOOP_DELAY = 0.05
 FORCE_THRESHOLD = 0
 HOLD_TIME = 3
 
+import rolling_average
+
 def main(dosage_period = 0):
     
     ### Each return statement after main ensures that main() won't be called continuously.
@@ -60,8 +62,10 @@ def main(dosage_period = 0):
 
         ###### Begin calculating the rolling average of FSRS
         ## Incorporate rolling average code here.
+        data_list_1 = []
+        data_list_2 = []
+        data_list_3 = []
 
-        
 
 
 
