@@ -1,12 +1,12 @@
 import create_objects
 import time
 import gate
+import rolling_average as rv
 
 LOOP_DELAY = 0.05
-FORCE_THRESHOLD = 0
+FORCE_THRESHOLD = 200
 HOLD_TIME = 3
 
-import rolling_average
 
 def main(dosage_period = 0):
     
@@ -66,8 +66,31 @@ def main(dosage_period = 0):
         data_list_2 = []
         data_list_3 = []
 
+        above_threshold = False
+        time_pressed = 0
 
+        while above_threshold != True:
+            data_list_1 = rv.update_list(data_list_1, rv.FSR1)
+            data_list_2 = rv.update_list(data_list_2, rv.FSR2)
+            data_list_3 = rv.update_list(data_list_3, rv.FSR3)
 
+            rolling_average_1 = rv.FSR_rolling_average(data_list_1) 
+            rolling_average_2 = rv.FSR_rolling_average(data_list_2) 
+            rolling_average_3 = rv.FSR_rolling_average(data_list_3)
+
+            #### Compares rolling averages
+            if rolling_average_1 > FORCE_THRESHOLD and rolling_average_2 > FORCE_THRESHOLD and rolling_average_3 > FORCE_THRESHOLD: 
+                ### imcrements time the sensor is pushed for
+                time_pressed += LOOP_DELAY
+                # checks if sensor is held for hold time
+                if time_pressed > HOLD_TIME:
+                    above_threshold = True
+            ### checks if person lets go and resets if necessary.
+            else:
+                if time_pressed > 0:
+                    time_pressed = 0
+
+            time.sleep(LOOP_DELAY)
 
         ##### Begin injection
         ##### Incorporate rolling average code here

@@ -20,7 +20,7 @@ RED_LED_PIN = 1
 BUZZER_PIN = 2
 DC_MOTOR_PIN = (3, 4)  # forward, backward
 ACTUATOR_PIN = (5, 6) # forward, backward
-BUTTON_PIN = 7
+BUTTON_PIN = 4
 
 def create_objects():
     green_led = LED(GREEN_LED_PIN)
