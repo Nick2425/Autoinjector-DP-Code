@@ -12,7 +12,7 @@ time_passed = 0
 
 def test_rolling_average():
     global time_passed
-    data_list_1 = []
+    data_list = [[],[],[]]
     time_list = []
 
     above_threshold = False
@@ -20,18 +20,15 @@ def test_rolling_average():
 
     ### PLOTLIB STUFF
     plt.ion()
-    fig, ax = plt.subplots()
-    ax.set_xlabel("Relative Time (s)", fontweight="bold")
-    ax.set_ylabel("Force (N)", fontweight="bold")
+    lines = []
+    figs = []
+    axes = []
+    for i in range(1):
+        line, fig, ax = generate_plot()
+        lines.append(line)
+        figs.append(fig)
+        axes.append(ax)
 
-    ax.set_xlim(-5, 0)
-    ax.set_ylim(-5,260)
-
-    ax.set_xticks([-5, -4, -3, -2, -1, 0])
-    ax.set_yticks([0, 50, 100, 150, 200, 250])
-
-    line: plt.Line2D = ax.plot(time_list, data_list_1)[0]
-    
     #### MAIN FUNCTION THIGNS
 
     while above_threshold != True:
@@ -61,24 +58,48 @@ def test_rolling_average():
         #### Matplotlib functions ####
         ##############################
 
-        line.set_xdata(time_list)
-        line.set_ydata(data_list_1)
-        
-        # Rescale axes automatically if needed
-        ax.relim()
-        ax.autoscale_view()
+        i = 0
+        for line in lines:
+            line.set_xdata(time_list)
+            line.set_ydata(data_list[i])
+            i+=1
+        for ax in axes: 
+            # Rescale axes automatically if needed
+            ax.relim()
+            ax.autoscale_view()
+        for fig in figs:
+            fig.canvas.draw()
+            fig.canvas.flush_events()
 
-        fig.canvas.draw()
-        fig.canvas.flush_events()
         plt.pause(LOOP_DELAY) # Pause to allow the GUI event loop to run
 
     plt.ioff()
     plt.show()
 
+
+def generate_plot():
+    fig, ax = plt.subplots()
+    ax.set_xlabel("Relative Time (s)", fontweight="bold")
+    ax.set_ylabel("Force (N)", fontweight="bold")
+
+    ax.set_xlim(-5, 0)
+    ax.set_ylim(-5,260)
+
+    ax.set_xticks([-5, -4, -3, -2, -1, 0])
+    ax.set_yticks([0, 50, 100, 150, 200, 250])
+
+    line: plt.Line2D = ax.plot([], [])[0]
+    return line, fig, ax
+
+
+
+
+
+
 ###### CREATES SIMULATED FORCE VALUES BASED ON A TRAPEZOIDIAL SINE WAVE
-def sim_force(): ## simulates force
+def sim_force(offset = 0): ## simulates force
     global time_passed
-    value = max(0,min(1,2*(math.sin((time_passed - 2)))))
+    value = max(0,min(1,2*(math.sin((time_passed - 2 - offset)))))
     return 210*value
 
 
@@ -105,10 +126,10 @@ def generate_time_list(n: int):
 
 ####### ROLLING AVERAGE CODE COPIED
 def FSR_rolling_average(datalist):
-  if len(datalist) < 30:
+  if len(datalist) < 50:
     return None
   else:
-    rolling_av = sum(datalist)/30
+    rolling_av = sum(datalist)/50
     return rolling_av
 
 

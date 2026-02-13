@@ -1,7 +1,6 @@
 import time
 import matplotlib as pl
 import matplotlib.pyplot as plt 
-import matplotlib.animation as anim
 import rolling_average as rv
 import numpy as np
 import math
@@ -12,36 +11,34 @@ HOLD_TIME = 3
 
 def test_rolling_average():
 
-    data_list_1 = []
-    data_list_2 = []
-    data_list_3 = []
+    data_list = [[],[],[]] #### EMPTY DATA SETS
+    FSR_list = [rv.FSR1, rv.FSR2, rv.FSR3] #### FORCE SENSOR LIST
+    RA_list: object = [] ### PREDEFINED ROLLING AVERAGE LIST
     time_list = []
+
     above_threshold = False
     time_pressed = 0
     plt.ion()
-    fig, ax = plt.subplots()
-    ax.set_xlabel("Relative Time (s)", fontweight="bold")
-    ax.set_ylabel("Force (N)", fontweight="bold")
-
-    ax.set_xlim(-5, 0)
-    ax.set_ylim(-5,260)
-
-    ax.set_xticks([-5, -4, -3, -2, -1, 0])
-    ax.set_yticks([0, 50, 100, 150, 200, 250])
-
-    line = ax.plot(time_list, data_list_1)[0]
     
-    while above_threshold != True:
-        data_list_1 = rv.update_list(data_list_1, rv.FSR1)
-        data_list_2 = rv.update_list(data_list_2, rv.FSR2)
-        data_list_3 = rv.update_list(data_list_3, rv.FSR3)
+    lines = []
+    figs = []
+    axes = []
+    for i in range(1):
+        line, fig, ax = generate_plot()
+        lines.append(line)
+        figs.append(fig)
+        axes.append(ax)
 
-        rv1 = rv.FSR_rolling_average(data_list_1) ##rolling average 1
-        rv2 = rv.FSR_rolling_average(data_list_2) ##rolling average 2
-        rv3 = rv.FSR_rolling_average(data_list_3) ##rolling average 3
+    while above_threshold != True:
+        for i in range(3):
+            data_list[i] = rv.update_list(data_list[i], FSR_list[i])
+        
+        RA_list.clear() ### RESETS ROLLING AVERAGE LIST
+        for i in range(3):
+            RA_list.append(rv.FSR_rolling_average(data_list[i])) ##RE APPENDS ROLLING AVERAGE LIST
 
         #### Compares rolling averages
-        if rv1 != None and rv2 != None and rv3 != None:
+        if RA_list[0] != None and RA_list[1] != None and RA_list[2] != None:
             if rv1 > FORCE_THRESHOLD and rv2 > FORCE_THRESHOLD and rv3 > FORCE_THRESHOLD: 
                 ### imcrements time the sensor is pushed for
                 time_pressed += 3*LOOP_DELAY #### adjusts for unknown time delay
@@ -83,3 +80,18 @@ def generate_time_list(n: int):
         time.append(element)
         element += LOOP_DELAY
     return time
+
+def generate_plot():
+    fig, ax = plt.subplots()
+    ax.set_xlabel("Relative Time (s)", fontweight="bold")
+    ax.set_ylabel("Force (N)", fontweight="bold")
+
+    ax.set_xlim(-5, 0)
+    ax.set_ylim(-5,260)
+
+    ax.set_xticks([-5, -4, -3, -2, -1, 0])
+    ax.set_yticks([0, 50, 100, 150, 200, 250])
+
+    line: plt.Line2D = ax.plot([], [])[0]
+    return line, fig, ax
+
