@@ -18,28 +18,29 @@ def test_rolling_average():
 
     above_threshold = False
     time_pressed = 0
-    plt.ion()
-    
-    lines = []
-    figs = []
-    axes = []
-    for i in range(1):
-        line, fig, ax = generate_plot()
-        lines.append(line)
-        figs.append(fig)
-        axes.append(ax)
 
+    ### MATPLOB LIB
+    plt.ion()
+    fig, ax = generate_plot()
+    fig.suptitle("Force Sensor Graphs")
+    lines = [] ### DATA FROM THE SENSORS WILL BE DISPLAYED IN THESE LINES
+
+    ###### CREATES LINES
+    for i in range(3):
+        line = ax[i].plot([], [])[0]
+        lines.append(line)
+    ###### THIS IS THE REGULAR SENSING STUFF NOW
+    
     while above_threshold != True:
         for i in range(3):
             data_list[i] = rv.update_list(data_list[i], FSR_list[i])
-        
         RA_list.clear() ### RESETS ROLLING AVERAGE LIST
         for i in range(3):
             RA_list.append(rv.FSR_rolling_average(data_list[i])) ##RE APPENDS ROLLING AVERAGE LIST
 
         #### Compares rolling averages
         if RA_list[0] != None and RA_list[1] != None and RA_list[2] != None:
-            if rv1 > FORCE_THRESHOLD and rv2 > FORCE_THRESHOLD and rv3 > FORCE_THRESHOLD: 
+            if RA_list[0] > FORCE_THRESHOLD and RA_list[1] > FORCE_THRESHOLD and RA_list[2] > FORCE_THRESHOLD: 
                 ### imcrements time the sensor is pushed for
                 time_pressed += 3*LOOP_DELAY #### adjusts for unknown time delay
                 # checks if sensor is held for hold time
@@ -53,17 +54,20 @@ def test_rolling_average():
 
 
         time.sleep(LOOP_DELAY)
+
         ##############################
         #### Matplotlib functions ####
         ##############################
 
-        line.set_xdata(time_list)
-        line.set_ydata(data_list_1)
+        for i in range(3):
+            lines[i].set_xdata(time_list)
+            lines[i].set_ydata(data_list[i])
         
         # Rescale axes automatically if needed
-        ax.relim()
-        ax.autoscale_view()
-    
+        for i in range(3):
+            ax[i].relim()
+            ax[i].autoscale_view()
+        
         fig.canvas.draw()
         fig.canvas.flush_events()
         plt.pause(LOOP_DELAY) # Pause to allow the GUI event loop to run
@@ -82,16 +86,16 @@ def generate_time_list(n: int):
     return time
 
 def generate_plot():
-    fig, ax = plt.subplots()
-    ax.set_xlabel("Relative Time (s)", fontweight="bold")
-    ax.set_ylabel("Force (N)", fontweight="bold")
+    fig, ax = plt.subplots(3)
+    for i in range(3):
+        ax[i].set_xlabel("Relative Time (s)", fontweight="bold")
+        ax[i].set_ylabel("Force (N)", fontweight="bold")
 
-    ax.set_xlim(-5, 0)
-    ax.set_ylim(-5,260)
+        ax[i].set_xlim(-5, 0)
+        ax[i].set_ylim(-5,260)
 
-    ax.set_xticks([-5, -4, -3, -2, -1, 0])
-    ax.set_yticks([0, 50, 100, 150, 200, 250])
+        ax[i].set_xticks([-5, -4, -3, -2, -1, 0])
+        ax[i].set_yticks([0, 50, 100, 150, 200, 250])
 
-    line: plt.Line2D = ax.plot([], [])[0]
-    return line, fig, ax
+    return fig, ax
 
