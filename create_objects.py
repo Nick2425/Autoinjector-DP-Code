@@ -6,6 +6,7 @@
 # Import Output Devices
 from gpiozero import Buzzer
 from gpiozero import Motor
+from gpiozero import Servo
 from gpiozero import LED
 from sensor_library import *
 # Import sensor devics
@@ -15,11 +16,11 @@ import time
 import sys
 
 # NUMBERS BELOW ARE PLACEHOLDERS
-GREEN_LED_PIN = 0
-RED_LED_PIN = 1
-BUZZER_PIN = 2
-DC_MOTOR_PIN = (3, 4)  # forward, backward
-ACTUATOR_PIN = (5, 6) # forward, backward
+GREEN_LED_PIN = 57
+RED_LED_PIN = 61
+BUZZER_PIN = 5
+DC_MOTOR_PIN = (12, 16)  # forward, backward
+SERVO_PIN = 26
 BUTTON_PIN = 4
 
 def create_objects():
@@ -28,7 +29,7 @@ def create_objects():
 
     buzzer = Buzzer(BUZZER_PIN)
     dc_motor = Motor(forward=DC_MOTOR_PIN[0], backward=DC_MOTOR_PIN[1])
-    actuator = Motor(ACTUATOR_PIN[0], ACTUATOR_PIN[1])
+    servo = Servo()
 
     fsr = Force_Sensing_Resistor(BUTTON_PIN)
     return green_led, red_led, buzzer, dc_motor, actuator, fsr
