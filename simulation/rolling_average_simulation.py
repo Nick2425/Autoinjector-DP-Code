@@ -1,9 +1,6 @@
 import time
 import matplotlib as pl
 import matplotlib.pyplot as plt 
-import matplotlib.animation as anim
-import numpy as np
-import math
 import simulate_force_sensors as rvs
 
 LOOP_DELAY = 0.05

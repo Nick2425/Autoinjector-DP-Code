@@ -131,8 +131,6 @@ def main(dosage_period = 0):
         ##### Incorporate rolling average code here
 
 
-
-
         ##### Grace period after injection
         time.sleep(5)
         ##### Close the gate
