@@ -38,7 +38,7 @@ def test_rolling_average():
         RA_list.clear() ### RESETS ROLLING AVERAGE LIST
         for i in range(3):
             RA_list.append(FSR_rolling_average(data_list[i])) ##RE APPENDS ROLLING AVERAGE LIST
-
+        print(data_list[1])
         #### Compares rolling averages
         if RA_list[0] != None and RA_list[1] != None and RA_list[2] != None:
             if RA_list[0] > FORCE_THRESHOLD and RA_list[1] > FORCE_THRESHOLD and RA_list[2] > FORCE_THRESHOLD: 
@@ -65,9 +65,6 @@ def test_rolling_average():
             lines[i].set_ydata(data_list[i])
         
         # Rescale axes automatically if needed
-        for i in range(3):
-            ax[i].relim()
-            ax[i].autoscale_view()
         
         fig.canvas.draw()
         fig.canvas.flush_events()
@@ -80,11 +77,10 @@ def test_rolling_average():
 def generate_plot():
     fig, ax = plt.subplots(3)
     for i in range(3):
-        ax[i].set_xlabel("Relative Time (s)", fontweight="bold")
-        ax[i].set_ylabel("Force (N)", fontweight="bold")
-
         ax[i].set_xlim(-5, 0)
         ax[i].set_ylim(-5,260)
+        ax[i].set_xlabel("Relative Time (s)", fontweight="bold")
+        ax[i].set_ylabel("Force (N)", fontweight="bold")
 
         ax[i].set_xticks([-5, -4, -3, -2, -1, 0])
         ax[i].set_yticks([0, 50, 100, 150, 200, 250])
