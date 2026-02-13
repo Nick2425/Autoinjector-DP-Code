@@ -32,4 +32,4 @@ def create_objects():
     servo = Servo()
 
     fsr = Force_Sensing_Resistor(BUTTON_PIN)
-    return green_led, red_led, buzzer, dc_motor, actuator, fsr
+    return green_led, red_led, buzzer, dc_motor, servo, fsr
