@@ -4,19 +4,19 @@ FSR1=Force_Sensing_Resistor(0)
 FSR2=Force_Sensing_Resistor(1)
 FSR3=Force_Sensing_Resistor(2)
 
-def FSR_rolling_average(datalist):
+def FSR_rolling_average(datalist: list[float]):
   if len(datalist) < 50:
     return None
   else:
     rolling_av = sum(datalist)/50
     return rolling_av
 
-def update_list(inputed_list, sensor: Force_Sensing_Resistor):
+def update_list(inputed_list: list[float], sensor: Force_Sensing_Resistor):
     updated_list = inputed_list.copy()
     if len(updated_list) < 50:
-        updated_list.append(sensor.force_raw())
+        updated_list.append(sensor.force_raw()) # type: ignore
     else:
         updated_list.pop(0)
-        updated_list.append(sensor.force_raw())
+        updated_list.append(sensor.force_raw()) # type: ignore
     return updated_list
 

@@ -8,19 +8,19 @@ FORCE_THRESHOLD = 200
 HOLD_TIME = 3
 
 
-def main(dosage_period = 0):
+def main(dosage_period: int = 0):
     
     ### Each return statement after main ensures that main() won't be called continuously.
     ###### INPUT INFORMATION BY DOCTOR ########
     if dosage_period == 0:
         try: ### CHECK TYPE OF INPUT
-            dosage_period = float(input("Enter dosage period: "))    
+            dosage_period: float = float(input("Enter dosage period: "))    
         except:
             print("Error: Enter a number for the dosage period!")
             main()
             return 0
     try: #### CHECK TYPE OF INPUT
-        dosage_count = input("Enter the dosage count: ")
+        dosage_count: int = input("Enter the dosage count: ")
         if str(int(dosage_count)) != dosage_count:
             print("Error: Enter an integer value for the dosage count!")
             main(dosage_period)
@@ -32,7 +32,7 @@ def main(dosage_period = 0):
     print("Success!")
 
     ##### Establish objects
-    devices = create_objects()
+    devices: list[object] = create_objects()
     #### Assign objects
     green_led = devices[0]
     red_led = devices[1]

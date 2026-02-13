@@ -4,16 +4,13 @@
 # This script instantiates the raspberry pi objects.
 
 # Import Output Devices
-from gpiozero import Buzzer
-from gpiozero import Motor
-from gpiozero import Servo
-from gpiozero import LED
+from gpiozero import Buzzer # type: ignore
+from gpiozero import Motor # type: ignore
+from gpiozero import Servo # type: ignore
+from gpiozero import LED # type: ignore
 from sensor_library import *
 # Import sensor devics
-from sensor_library import *
 
-import time
-import sys
 
 # NUMBERS BELOW ARE PLACEHOLDERS
 GREEN_LED_PIN = 57
@@ -23,7 +20,7 @@ DC_MOTOR_PIN = (12, 16)  # forward, backward
 SERVO_PIN = 26
 BUTTON_PIN = 4
 
-def create_objects():
+def create_objects() -> list[object]:
     green_led = LED(GREEN_LED_PIN)
     red_led = LED(RED_LED_PIN)
 
@@ -32,4 +29,4 @@ def create_objects():
     servo = Servo()
 
     fsr = Force_Sensing_Resistor(BUTTON_PIN)
-    return green_led, red_led, buzzer, dc_motor, servo, fsr
+    return [green_led, red_led, buzzer, dc_motor, servo, fsr]
