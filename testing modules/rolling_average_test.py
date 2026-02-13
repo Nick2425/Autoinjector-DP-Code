@@ -11,9 +11,9 @@ HOLD_TIME = 3
 
 def test_rolling_average():
 
-    data_list = [[],[],[]] #### EMPTY DATA SETS
-    FSR_list = [rv.FSR1, rv.FSR2, rv.FSR3] #### FORCE SENSOR LIST
-    RA_list: object = [] ### PREDEFINED ROLLING AVERAGE LIST
+    data_list = [[],[],[]]                  #### EMPTY DATA SETS
+    FSR_list = [rv.FSR1, rv.FSR2, rv.FSR3]  #### FORCE SENSOR LIST
+    RA_list: object = []                    ### PREDEFINED ROLLING AVERAGE LIST
     time_list = []
 
     above_threshold = False
@@ -23,7 +23,7 @@ def test_rolling_average():
     plt.ion()
     fig, ax = generate_plot()
     fig.suptitle("Force Sensor Graphs")
-    lines = [] ### DATA FROM THE SENSORS WILL BE DISPLAYED IN THESE LINES
+    lines = []                              ### DATA FROM THE SENSORS WILL BE DISPLAYED IN THESE LINES
 
     ###### CREATES LINES
     for i in range(3):

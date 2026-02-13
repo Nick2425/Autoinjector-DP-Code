@@ -1,7 +1,7 @@
 # Jan 29th 2026
 # Nick Kuijpers
 # SN: 400619254
-# This script instantiates the raspberry pi objects.
+# This script instantiates the raspberry pi devices' objects.
 
 # Import Output Devices
 from gpiozero import Buzzer
