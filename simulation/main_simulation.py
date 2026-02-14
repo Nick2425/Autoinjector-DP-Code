@@ -158,7 +158,7 @@ def update_list(inputed_list, sensor: Force_Sensing_Resistor):
         updated_list.append(sensor.force_raw())
     return updated_list
 
-### GENERATES A LIST OF RELATIVE TIMES DISPLAYED ON THE PLOT
+### GENERATES A LIST OF TIMES DISPLAYED ON THE PLOT
 def generate_time_list(n: int):
     time = []
     element = LOOP_DELAY * -1*n
