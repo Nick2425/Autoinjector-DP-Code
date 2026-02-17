@@ -4,6 +4,10 @@ import gate
 import rolling_average as rv
 import matplotlib.pyplot as plt
 from sensor_library import *
+from gpiozero import Buzzer
+from gpiozero import Motor
+from gpiozero import Servo
+from gpiozero import LED
 
 LOOP_DELAY = 0.05
 FORCE_THRESHOLD = 200
@@ -35,18 +39,23 @@ def main(dosage_period = 0):
 
     ##### Establish objects
     devices = create_objects()
-    #### Assign objects
+    #### Assign objects and enforce types
     green_led = devices[0]
     red_led = devices[1]
     buzzer = devices[2]
     dc_motor = devices[3]
-    actuator = devices[4]
+    servo = devices[4]
     button_sensor = devices[5]
     #### Establish initial doses
     doses_administered = 0
     while doses_administered < dosage_count:
         gate_open = False
         green_led.on()
+
+        ### ACTIVATE BUZZER HERE
+
+
+
 
 
         ########### While the gate isn't --- program halts until the button is pressed and gate opens
@@ -149,6 +158,30 @@ def main(dosage_period = 0):
     return 0
 
 
+
+
+def generate_plot():
+    fig, ax = plt.subplots(3, 2)
+    for i in range(3):
+        ax[i,0].set_xlim(-3, 0)
+        ax[i,0].set_ylim(-3,160)
+        ax[i,0].set_xlabel("Relative Time (s)", fontweight="bold")
+        ax[i,0].set_ylabel("Force (N)", fontweight="bold")
+
+        ax[i,0].set_xticks([-3, -2, -1, 0])
+        ax[i,0].set_yticks([0, 50, 100, 150])
+    ### LEDS
+    ax[0,1].set_xlabel("LED Color")
+    ax[0,1].set_ylabel("LED Status")
+    ### MOTOR STATUS
+    ax[1,1].set_xlabel("Motor Type")
+    ax[1,1].set_ylabel("Motor Status")
+
+    ### BUZZER STATUS
+    ax[1,1].set_ylabel("Buzzer Status")
+
+
+####### THIS UPDATES THE STORED FORCE VALUES IN THE LIST AFTER REACHING MAXIMUM CAPACITY
 def update_list(inputed_list, sensor: Force_Sensing_Resistor):
     updated_list = inputed_list.copy()
     if len(updated_list) < 150: ### stores elements up to 150

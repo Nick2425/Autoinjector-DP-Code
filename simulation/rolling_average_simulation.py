@@ -29,7 +29,7 @@ def test_rolling_average():
 
     ###### CREATES LINES
     for i in range(3):
-        line = ax[i].plot([], [])[0]
+        line = ax[i, 0].plot([], [])[0]
         lines.append(line)
 
     ###### Loop in which sensing occurs
@@ -68,8 +68,8 @@ def test_rolling_average():
         for i in range(3):
             lines[i].set_xdata(time_list)
             lines[i].set_ydata(data_list[i])
-            ax[i].set_xlabel(f"Relative Time (s) | Rolling Average {i} = {RA_list[i]}", fontweight="bold")
-            ax[i].relim()        
+            ax[i, 0].set_xlabel(f"Relative Time (s) | Rolling Average {i} = {RA_list[i]}", fontweight="bold")
+            ax[i, 0].relim()        
     
         fig.canvas.draw()
         fig.canvas.flush_events()
@@ -83,15 +83,15 @@ def test_rolling_average():
 #### This function generates subplots for the graphs
 
 def generate_plot():
-    fig, ax = plt.subplots(3, sharex=True, sharey=True)
+    fig, ax = plt.subplots(3, 2, sharex=True, sharey=True)
     for i in range(3):
-        ax[i].set_xlim(-3, 0)
-        ax[i].set_ylim(-3,160)
-        ax[i].set_xlabel("Relative Time (s)", fontweight="bold")
-        ax[i].set_ylabel("Force (N)", fontweight="bold")
+        ax[i, 0].set_xlim(-3, 0)
+        ax[i, 0].set_ylim(-3,160)
+        ax[i, 0].set_xlabel("Relative Time (s)", fontweight="bold")
+        ax[i, 0].set_ylabel("Force (N)", fontweight="bold")
 
-        ax[i].set_xticks([-3, -2, -1, 0])
-        ax[i].set_yticks([0, 50, 100, 150])
+        ax[i, 0].set_xticks([-3, -2, -1, 0])
+        ax[i, 0].set_yticks([0, 50, 100, 150])
 
     return fig, ax
 
