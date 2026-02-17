@@ -1,1 +1,3 @@
-impport math
+import math
+Radius = #enter radius
+Conver_Constant = math.pi * Radius * 2
