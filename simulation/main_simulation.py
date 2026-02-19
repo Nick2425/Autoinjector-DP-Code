@@ -39,7 +39,7 @@ def main(dosage_period = 0):
     buzzer = 0
     dc_motor = 0
     servo = 0
-    button_sensor = 0
+    button_sensor = 300
 
 
     #### Establish initial doses
@@ -85,7 +85,7 @@ def main(dosage_period = 0):
 
         ########### While the gate isn't --- program halts until the button is pressed and gate opens
         while gate_open == False:
-            time.sleep(LOOP_DELAY) ### reduces cpu load on pi
+            plt.pause(LOOP_DELAY) ### reduces cpu load on pi
             # Check the force sensor
             try:
                 if button_sensor > FORCE_THRESHOLD:
@@ -271,3 +271,5 @@ def update_other_outputs(data, ax, fig):
     fig.canvas.draw()
     fig.canvas.flush_events()
 
+
+main()

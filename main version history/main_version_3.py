@@ -12,9 +12,8 @@ import push_dose
 
 
 LOOP_DELAY = 0.05
-FORCE_THRESHOLD = 100
+FORCE_THRESHOLD = 200
 HOLD_TIME = 3
-SYRINGE_VOLUME = 10 ## PLACEHOLDER
 
 
 def main(dosage_period = 0):
@@ -80,55 +79,50 @@ def main(dosage_period = 0):
     finally:
         pass ### CODE CONTINUES TO RUN DESPITE ENCOUNTERING GRAPH ISSUES
 
+    
     ############### TIME LIST DEFINITION AND FORCE SENSOR OBJECTS ################
     time_list = []
     FSR_list = [rv.FSR1, rv.FSR2, rv.FSR3, button_sensor]
 
-    #################################################### GRAPH DATA UPDATES ################################3
-    update_led_bars([red_led.is_active,green_led.is_active], ax, fig)
-    update_other_outputs([servo.is_active, dc_motor.is_active, buzzer.is_active], ax, fig)
+
     #################################################### GRAPH DATA UPDATES ################################3
     plt.tight_layout()
+    update_other_outputs([servo.is_active, dc_motor.is_active, buzzer.is_active], ax, fig)
+    #################################################### GRAPH DATA UPDATES ################################3
+
+
+
 
     #### ESTABLISH INITIAL DOSAGE COUNT AND DOSES ADMINISTERED
     doses_administered = 0
-    dosage_count = SYRINGE_VOLUME / dosage_amount
+    dosage_count = #volume of syringe // dosage_amount
 
 
-    ###### MAIN LOOP BEGINS HERE #####################
+
     while doses_administered < dosage_count:
-
-        ######### initialize gate, graphs and LEDs
         gate_open = False
         green_led.on()
-        
-        #################################################### GRAPH DATA UPDATES ################################3
         update_led_bars([red_led.is_active,green_led.is_active], ax, fig)
-        update_other_outputs([servo.is_active, dc_motor.is_active, buzzer.is_active], ax, fig)
-        #################################################### GRAPH DATA UPDATES ################################3
 
-        ######### ACTIVATE BUZZER HERE (off for sanity)
+        ### ACTIVATE BUZZER HERE
         #buzzer.on()
+        ### Here the force data lists are predefined
+        data_list = [[],[],[],[]] #### EMPTY DATA SETS
+        RA_list = [] ### PREDEFINED ROLLING AVERAGE LIST
+        time_list = []
 
-        data_list = [[],[],[],[]]   #### EMPTY DATA SETS
-        RA_list = []                #### DEFINES / CLEARS THE ROLLING AVERAGE LIST
-        time_list = []              #### LIST OF TIMES FOR THE GRAPH 
+        #### initial variables
+        above_threshold = False
+        time_pressed = 0
 
-        above_threshold = False     #### USED FOR ROLLING AVERAGE CHECKING
-        time_pressed = 0            #### USED TO DETECT IF 3 MAIN FORCE SENSORS ARE HELD FOR 3+ SECONDS
-
+        plt.tight_layout()
         ########### While the gate isn't --- program halts until the button is pressed and gate opens
         while gate_open == False:
-            plt.pause(LOOP_DELAY) 
+            plt.pause(LOOP_DELAY) ### reduces cpu load on pi
             data_list[3] = update_list(data_list[3], FSR_list[3])
             time_list = generate_time_list(len(data_list[3]))
 
-            #################################################### GRAPH DATA UPDATES ################################3
-            update_led_bars([red_led.is_active,green_led.is_active], ax, fig)
-            update_other_outputs([servo.is_active, dc_motor.is_active, buzzer.is_active], ax, fig)
-            #################################################### GRAPH DATA UPDATES ################################3
-
-            ############# Check the force sensor
+            # Check the force sensor
             try:
                 if button_sensor.force_raw() > FORCE_THRESHOLD:
                     gate_open = True
@@ -138,10 +132,8 @@ def main(dosage_period = 0):
             except:
                 print("Error opening the gate")
 
-        #################################################### GRAPH DATA UPDATES ################################3
         update_led_bars([red_led.is_active,green_led.is_active], ax, fig)
         update_other_outputs([servo.is_active, dc_motor.is_active, buzzer.is_active], ax, fig)
-        #################################################### GRAPH DATA UPDATES ################################3
 
         ###### Begin calculating the rolling average of FSRS
         ## Incorporate rolling average code here.
@@ -155,7 +147,7 @@ def main(dosage_period = 0):
                 average = FSR_rolling_average(data_list[i])
                 RA_list.append(average) ##REAPPENDS ROLLING AVERAGE LIST
             time_list = generate_time_list(len(data_list[0]))
-            data_list[3] = update_list(data_list[3], FSR_list[3])
+
 
             #### Compares rolling averages and checks if they are defined or are null
             if RA_list[0] != None and RA_list[1] != None and RA_list[2] != None:
@@ -169,18 +161,18 @@ def main(dosage_period = 0):
                         time_pressed = 0        #### which can imply that the device is in contact at the wrong angle and therefore can malfunction
 
 
+            plt.pause(LOOP_DELAY)
             ##############################
             #### Matplotlib functions ####
             ##############################
-            plt.pause(LOOP_DELAY)
+
             for i in range(3):
                 lines[i].set_xdata(time_list)
                 lines[i].set_ydata(data_list[i])
                 ax[i,0].set_xlabel(f"Relative Time (s) | Rolling Average {i} = {RA_list[i]}", fontweight="bold")
                 ax[i,0].relim()  
-                fig.suptitle(f"Sensor and Output Device Data | Press time is {round(time_pressed,2)} s")
 
-            ax[2, 1].set_xlabel(f"Relative Time (s)", fontweight="bold")
+            ax[2, 1].set_xlabel(f"Relative Time (s) | Press Time = {round(time_pressed,2)}", fontweight="bold")
             lines[3].set_xdata(time_list)
             lines[3].set_ydata(data_list[3])
         
@@ -192,14 +184,12 @@ def main(dosage_period = 0):
             update_other_outputs([servo.is_active, dc_motor.is_active, buzzer.is_active], ax, fig)
 
 
-        ##### BEGIN INJECTION HERE
-        push_dose.push_dose(servo)
-        
+        ##### Begin injection
+        ##### Incorporate rolling average code here
 
-        #################################################### GRAPH DATA UPDATES ################################3
+        push_dose.push_dose(servo)
         update_led_bars([red_led.is_active,green_led.is_active], ax, fig)
         update_other_outputs([servo.is_active, dc_motor.is_active, buzzer.is_active], ax, fig)
-        #################################################### GRAPH DATA UPDATES ################################3
 
         ##### Grace period after injection
         plt.pause(5)
@@ -208,23 +198,22 @@ def main(dosage_period = 0):
             gate.open(dc_motor, open=False)
         except:
             print("Error closing the gate")
-
-
         ### Finishing the dose administration
         doses_administered += 1
         red_led.on()
-
-        #################################################### GRAPH DATA UPDATES ################################3
         update_led_bars([red_led.is_active,green_led.is_active], ax, fig)
         update_other_outputs([servo.is_active, dc_motor.is_active, buzzer.is_active], ax, fig)
-        #################################################### GRAPH DATA UPDATES ################################3
 
         plt.pause(dosage_period) ### Waits for dosage period.
 
     #### End of autoinjector use - needs refill now.
     plt.ioff()
     plt.show()
-     
+
+    return 0
+
+
+
 
 ### GENERATES PLOTS
 def generate_plot():
@@ -254,10 +243,6 @@ def generate_plot():
     ax[2,1].set_yticks([0, 50, 100, 150])
 
     return fig, ax
-
-
-
-
 ####### THIS UPDATES THE STORED FORCE VALUES IN THE LIST AFTER REACHING MAXIMUM CAPACITY
 def update_list(inputed_list, sensor: Force_Sensing_Resistor):
     updated_list = inputed_list.copy()
@@ -268,20 +253,14 @@ def update_list(inputed_list, sensor: Force_Sensing_Resistor):
         updated_list.append(sensor.force_raw())
     return updated_list
 
-
-
-
 ### GENERATES A LIST OF RELATIVE TIMES DISPLAYED ON THE PLOT
 def generate_time_list(n: int):
-    time_list = []
+    time = []
     element = LOOP_DELAY * -1*n
     for i in range(n):
-        time_list.append(element)
+        time.append(element)
         element += LOOP_DELAY
-    return time_list
-
-
-
+    return time
 
 ####### ROLLING AVERAGE CODE COPIED
 def FSR_rolling_average(datalist):
@@ -291,9 +270,6 @@ def FSR_rolling_average(datalist):
     rolling_av = sum(datalist, -30)/30 #### Returns the rolling average of the latest 30 elements.
     return round(rolling_av, 2)
   
-
-
-
 ### UPDATES LED BAR GRAPH
 def update_led_bars(data, ax, fig):
     colors = ['Red LED', 'Green LED']
@@ -302,9 +278,6 @@ def update_led_bars(data, ax, fig):
     ax[0,1].bar(colors, data, color = bar_colors)[0] 
     fig.canvas.draw()
     fig.canvas.flush_events()
-
-
-
 
 
 ### updates the graph of the other outputs
