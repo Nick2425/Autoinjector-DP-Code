@@ -7,13 +7,20 @@ RPM = 80 # revolutions per minute
 TIME = 5
 SPEED = 0.5
 
-def open(motor: Motor, open = True):
+def open(motor_object: Motor, open = True):
     if open == True:
-        motor.forward(speed=SPEED)
+        motor_object.forward(speed=SPEED)
         time.sleep(TIME)
-        motor.stop()
+        motor_object.stop()
     else:
-        motor.backward(speed=SPEED)
+        motor_object.backward(speed=SPEED)
         time.sleep(TIME)
-        motor.stop()
+        motor_object.stop()
 
+DC_MOTOR_PIN = (12, 16)  # forward, backward
+MOTOR_TEST = Motor(forward=DC_MOTOR_PIN[0], backward=DC_MOTOR_PIN[1])
+
+def test_gate():
+    open(MOTOR_TEST)
+    time.sleep(5)
+    open(MOTOR_TEST, False)

@@ -39,7 +39,7 @@ def main(dosage_period = 0):
     buzzer = 0
     dc_motor = 0
     servo = 0
-    button_sensor = 201
+    button_sensor = 0
 
 
     #### Establish initial doses
@@ -271,4 +271,3 @@ def update_other_outputs(data, ax, fig):
     fig.canvas.draw()
     fig.canvas.flush_events()
 
-main()
