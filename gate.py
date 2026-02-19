@@ -17,10 +17,11 @@ def open(motor_object: Motor, open = True):
         time.sleep(TIME)
         motor_object.stop()
 
-DC_MOTOR_PIN = (12, 16)  # forward, backward
-MOTOR_TEST = Motor(forward=DC_MOTOR_PIN[0], backward=DC_MOTOR_PIN[1])
 
 def test_gate():
+    DC_MOTOR_PIN = (12, 16)  # forward, backward
+    MOTOR_TEST = Motor(forward=DC_MOTOR_PIN[0], backward=DC_MOTOR_PIN[1])
+
     open(MOTOR_TEST)
     time.sleep(5)
     open(MOTOR_TEST, False)
