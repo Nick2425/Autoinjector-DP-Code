@@ -28,13 +28,13 @@ def main(dosage_period = 0):
             main()
             return 0
     try: #### CHECK TYPE OF INPUT
-        dosage_count = input("Enter the dosage count: ")
-        if str(int(dosage_count)) != dosage_count:
-            print("Error: Enter an integer value for the dosage count!")
+        dosage_amount = input("Enter the dosage amount in mL: ")
+        if str(int(dosage_amount)) != dosage_amount:
+            print("Error: Enter an integer value for the dosage amount!")
             main(dosage_period)
             return 0
     except:
-        print("Error: Enter an integer value for the dosage count!")
+        print("Error: Enter an integer value for the dosage amount!")
         main(dosage_period)
         return 0
     print("Success!")
@@ -78,6 +78,7 @@ def main(dosage_period = 0):
 
     #### Establish initial doses
     doses_administered = 0
+    dosage_count = #volume of syringe // dosage_amount
     while doses_administered < dosage_count:
         gate_open = False
         green_led.on()
