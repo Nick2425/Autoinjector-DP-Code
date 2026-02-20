@@ -194,7 +194,7 @@ def main(dosage_period = 0):
 
         ##### BEGIN INJECTION HERE
         servo.value = inject_amount(doses_administered, int(dosage_amount))
-        time.sleep(1)
+        plt.pause(1)
         servo.detach()  ## to avoid jittering
         force_list = []  ## checks if user was still holding in proper position
         for i in range(3):
