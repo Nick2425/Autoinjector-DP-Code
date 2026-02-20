@@ -41,17 +41,22 @@ def main(dosage_period = 0):
 
 
 
-    ### ESTABLISHES AMOUNT OF DOSES AND PERIOD
+    ### Converts the 
     dosage_amount = int(dosage_amount)
     dosage_period = int(dosage_period)
 
-    #### THIS ASSIGNS OBJECTS TO VARIABLES
-    green_led = create_objects.GREEN_LED
-    red_led = create_objects.RED_LED
-    buzzer = create_objects.BUZZER
-    dc_motor = create_objects.MOTOR
-    servo = create_objects.SERVO
-    button_sensor = create_objects.FSR
+    ##### Establish objects
+    devices = create_objects.create_objects()
+
+    #### Assign objects and enforce types
+    green_led: LED = devices[0]
+    red_led: LED = devices[1]
+    buzzer: Buzzer = devices[2]
+    dc_motor: Motor = devices[3]
+    servo: Servo = devices[4]
+    button_sensor: Force_Sensing_Resistor = devices[5]
+
+
 
     ### MATPLOB LIB CONFIGURATION
     plt.ion()
@@ -110,8 +115,14 @@ def main(dosage_period = 0):
 
         ########### While the gate isn't --- program halts until the button is pressed and gate opens
         while gate_open == False:
+            plt.pause(LOOP_DELAY) 
             data_list[3] = update_list(data_list[3], FSR_list[3])
             time_list = generate_time_list(len(data_list[3]))
+
+            #################################################### GRAPH DATA UPDATES ################################3
+            update_led_bars([red_led.is_active,green_led.is_active], ax, fig)
+            update_other_outputs([servo.is_active, dc_motor.is_active, buzzer.is_active], ax, fig)
+            #################################################### GRAPH DATA UPDATES ################################3
 
             ############# Check the force sensor
             try:
@@ -123,16 +134,9 @@ def main(dosage_period = 0):
             except:
                 print("Error opening the gate")
 
-            ######## MATPLOTLIB ########
-            plt.pause(LOOP_DELAY) 
-            #################################################### GRAPH DATA UPDATES ################################3
-            update_led_bars([int(red_led.is_active),int(green_led.is_active)], ax, fig)
-            update_other_outputs([int(servo.is_active), int(dc_motor.is_active), int(buzzer.is_active)], ax, fig)
-            #################################################### GRAPH DATA UPDATES ################################3
-
         #################################################### GRAPH DATA UPDATES ################################3
-        update_led_bars([int(red_led.is_active),int(green_led.is_active)], ax, fig)
-        update_other_outputs([int(servo.is_active), int(dc_motor.is_active), int(buzzer.is_active)], ax, fig)
+        update_led_bars([red_led.is_active,green_led.is_active], ax, fig)
+        update_other_outputs([servo.is_active, dc_motor.is_active, buzzer.is_active], ax, fig)
         #################################################### GRAPH DATA UPDATES ################################3
 
         ###### Begin calculating the rolling average of FSRS
@@ -180,10 +184,8 @@ def main(dosage_period = 0):
             fig.canvas.flush_events()
             plt.pause(LOOP_DELAY) 
             rv.time_passed += LOOP_DELAY
-            #################################################### GRAPH DATA UPDATES ################################3
-            update_led_bars([int(red_led.is_active),int(green_led.is_active)], ax, fig)
-            update_other_outputs([int(servo.is_active), int(dc_motor.is_active), int(buzzer.is_active)], ax, fig)
-            #################################################### GRAPH DATA UPDATES ################################3
+            update_led_bars([red_led.is_active,green_led.is_active], ax, fig)
+            update_other_outputs([servo.is_active, dc_motor.is_active, buzzer.is_active], ax, fig)
 
 
         ##### BEGIN INJECTION HERE
@@ -201,8 +203,8 @@ def main(dosage_period = 0):
         
 
         #################################################### GRAPH DATA UPDATES ################################3
-        update_led_bars([int(red_led.is_active),int(green_led.is_active)], ax, fig)
-        update_other_outputs([int(servo.is_active), int(dc_motor.is_active), int(buzzer.is_active)], ax, fig)
+        update_led_bars([red_led.is_active,green_led.is_active], ax, fig)
+        update_other_outputs([servo.is_active, dc_motor.is_active, buzzer.is_active], ax, fig)
         #################################################### GRAPH DATA UPDATES ################################3
 
         ##### Grace period after injection
@@ -219,8 +221,8 @@ def main(dosage_period = 0):
         red_led.on()
 
         #################################################### GRAPH DATA UPDATES ################################3
-        update_led_bars([int(red_led.is_active),int(green_led.is_active)], ax, fig)
-        update_other_outputs([int(servo.is_active), int(dc_motor.is_active), int(buzzer.is_active)], ax, fig)
+        update_led_bars([red_led.is_active,green_led.is_active], ax, fig)
+        update_other_outputs([servo.is_active, dc_motor.is_active, buzzer.is_active], ax, fig)
         #################################################### GRAPH DATA UPDATES ################################3
 
         plt.pause(dosage_period) ### Waits for dosage period.

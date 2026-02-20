@@ -23,13 +23,10 @@ DC_MOTOR_PIN = (12, 16)  # forward, backward
 SERVO_PIN = 26
 BUTTON_PIN = 3
 
-def create_objects():
-    green_led = LED(GREEN_LED_PIN)
-    red_led = LED(RED_LED_PIN)
+GREEN_LED = LED(GREEN_LED_PIN)
+RED_LED = LED(RED_LED_PIN)
+BUZZER = Buzzer(BUZZER_PIN)
+DC_MOTOR = Motor(forward=DC_MOTOR_PIN[0], backward=DC_MOTOR_PIN[1])
+SERVO: Servo = Servo(SERVO_PIN, min_pulse_width=0.00055, max_pulse_width=0.00235)
 
-    buzzer = Buzzer(BUZZER_PIN)
-    dc_motor = Motor(forward=DC_MOTOR_PIN[0], backward=DC_MOTOR_PIN[1])
-    servo: Servo = Servo(SERVO_PIN, min_pulse_width=0.00055, max_pulse_width=0.00235)
-
-    fsr = Force_Sensing_Resistor(BUTTON_PIN)
-    return green_led, red_led, buzzer, dc_motor, servo, fsr
+FSR = Force_Sensing_Resistor(BUTTON_PIN)
