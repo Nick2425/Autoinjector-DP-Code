@@ -141,6 +141,7 @@ def main(dosage_period = 0):
         ###### Begin calculating the rolling average of FSRS
         ## Incorporate rolling average code here.
 
+        data_list[3].clear()
         while above_threshold != True:
 
             ##### RA IS THE SAME AS ROLLING AVERAGE
