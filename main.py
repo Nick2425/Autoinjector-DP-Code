@@ -142,6 +142,7 @@ def main(dosage_period = 0):
         ## Incorporate rolling average code here.
 
         data_list[3].clear()
+        time_list.clear()
         while above_threshold != True:
 
             ##### RA IS THE SAME AS ROLLING AVERAGE
