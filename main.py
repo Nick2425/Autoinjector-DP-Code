@@ -9,7 +9,7 @@ from gpiozero import Motor
 from gpiozero import Servo
 from gpiozero import LED
 import push_dose
-
+import injection
 
 LOOP_DELAY = 0.05
 FORCE_THRESHOLD = 100
@@ -193,7 +193,9 @@ def main(dosage_period = 0):
 
 
         ##### BEGIN INJECTION HERE
-        push_dose.push_dose(servo)
+        servo.value(inject_amount(doses_administered, int(dosage_amount)))
+        force_list = []
+        
         
 
         #################################################### GRAPH DATA UPDATES ################################3
@@ -321,3 +323,9 @@ def inject_amount(count, dosage):
   current_amount = (count+1) * dosage
   distance = round(((current_amount / Conver_Constant)*(2/1.7)),1)-1
   return distance
+
+### verifies the syringe was still held properly after drug delivery
+def finish_injection_check(sensor, input_list)):
+    
+    
+
