@@ -1,5 +1,4 @@
 import create_objects
-import time
 import gate
 import rolling_average as rv
 import matplotlib.pyplot as plt
@@ -8,7 +7,6 @@ from gpiozero import Buzzer
 from gpiozero import Motor
 from gpiozero import Servo
 from gpiozero import LED
-import push_dose
 import injection
 
 LOOP_DELAY = 0.05
