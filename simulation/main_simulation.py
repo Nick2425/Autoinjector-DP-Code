@@ -146,8 +146,7 @@ def main(dosage_period = 0):
             lines[3].set_xdata(time_list)
             lines[3].set_ydata(data_list[3])
         
-            fig.canvas.draw()
-            fig.canvas.flush_events()
+
             plt.pause(LOOP_DELAY) 
             rvs.time_passed += 5*LOOP_DELAY
 
