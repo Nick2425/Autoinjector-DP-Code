@@ -10,6 +10,6 @@ def inject_amount(count, dosage):
     distance = round(((current_amount / Conver_Constant)*(2/1.7)),1)-1
     return distance
 dosage = 2
-for i in range(3):
+for i in range(5):
   servo.value(inject_amount(i,dosage))
 
