@@ -195,6 +195,12 @@ def main(dosage_period = 0):
         ##### BEGIN INJECTION HERE
         servo.value(inject_amount(doses_administered, int(dosage_amount)))
         force_list = []
+        for i in range(3):
+            force_list.append(FSR_list[i].force_raw())
+        if force_list[0] > FORCE_THRESHOLD and force_list[1] > FORCE_THRESHOLD and force_list[2] > FORCE_THRESHOLD:
+            print('delivery successful')
+        else:
+            print('potential incompletion in delivery')
         
         
 
@@ -324,8 +330,5 @@ def inject_amount(count, dosage):
   distance = round(((current_amount / Conver_Constant)*(2/1.7)),1)-1
   return distance
 
-### verifies the syringe was still held properly after drug delivery
-def finish_injection_check(sensor, input_list)):
-    
     
 
