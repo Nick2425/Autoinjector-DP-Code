@@ -233,6 +233,8 @@ def main(dosage_period = 0):
 
     #### End of autoinjector use - needs refill now.
     servo.min()  ## resets linear actuator position
+    plt.pause(1)
+    servo.detach()
     plt.ioff()
     plt.show()
      
