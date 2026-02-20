@@ -332,7 +332,7 @@ def update_other_outputs(data, ax, fig):
 ### CALCULATES SEVRO MOTOR PUSH DISTANCE
 def inject_amount(count, dosage):
   current_amount = (count+1) * dosage
-  distance = ((current_amount / CONVER_CONSTANT)*(2/1.7))-1
+  distance = ((current_amount / injection.CONVER_CONSTANT)*(2/1.7))-1
   return distance
 
     
