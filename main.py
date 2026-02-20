@@ -315,3 +315,9 @@ def update_other_outputs(data, ax, fig):
     ax[1,1].bar(labels_graph_1, data, color = bar_colors)[0] 
     fig.canvas.draw()
     fig.canvas.flush_events()
+
+### CALCULATES SEVRO MOTOR PUSH DISTANCE
+def inject_amount(count, dosage):
+  current_amount = (count+1) * dosage
+  distance = round(((current_amount / Conver_Constant)*(2/1.7)),1)-1
+  return distance
