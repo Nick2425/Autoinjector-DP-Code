@@ -49,7 +49,7 @@ def main(dosage_period = 0):
     green_led = create_objects.GREEN_LED
     red_led = create_objects.RED_LED
     buzzer = create_objects.BUZZER
-    dc_motor = create_objects.MOTOR
+    dc_motor = create_objects.DC_MOTOR
     servo = create_objects.SERVO
     button_sensor = create_objects.FSR
 
