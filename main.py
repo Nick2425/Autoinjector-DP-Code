@@ -3,10 +3,6 @@ import gate
 import rolling_average as rv
 import matplotlib.pyplot as plt
 from sensor_library import *
-from gpiozero import Buzzer
-from gpiozero import Motor
-from gpiozero import Servo
-from gpiozero import LED
 import injection
 
 LOOP_DELAY = 0.05
