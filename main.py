@@ -305,11 +305,6 @@ def update_led_bars(data, ax, fig):
     bar_colors = ['tab:red', 'tab:green']
     ax[0,1].clear()
     ax[0,1].bar(colors, data, color = bar_colors)[0] 
-    fig.canvas.draw()
-    fig.canvas.flush_events()
-
-
-
 
 
 ### updates the graph of the other outputs
@@ -318,8 +313,6 @@ def update_other_outputs(data, ax, fig):
     bar_colors = ['tab:blue', 'tab:purple', 'tab:red']
     ax[1,1].clear()
     ax[1,1].bar(labels_graph_1, data, color = bar_colors)[0] 
-    fig.canvas.draw()
-    fig.canvas.flush_events()
 
 ### CALCULATES SEVRO MOTOR PUSH DISTANCE
 def inject_amount(count, dosage):
