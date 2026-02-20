@@ -9,7 +9,7 @@ from gpiozero import Servo
 from gpiozero import LED
 import injection
 
-LOOP_DELAY = 0.01
+LOOP_DELAY = 0.05
 FORCE_THRESHOLD = 100
 HOLD_TIME = 3
 SYRINGE_VOLUME = 10 ## PLACEHOLDER
