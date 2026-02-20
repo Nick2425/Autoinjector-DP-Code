@@ -193,6 +193,8 @@ def main(dosage_period = 0):
 
 
         ##### BEGIN INJECTION HERE
+        if doses_administered == 0:
+            servo.min()  ## resets servo position
         servo.value(inject_amount(doses_administered, int(dosage_amount)))
         force_list = []
         for i in range(3):
