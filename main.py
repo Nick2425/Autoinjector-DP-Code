@@ -193,10 +193,10 @@ def main(dosage_period = 0):
 
 
         ##### BEGIN INJECTION HERE
-        if doses_administered == 0:
-            servo.min()  ## resets servo position
-        servo.value(inject_amount(doses_administered, int(dosage_amount)))
-        force_list = []
+        servo.value = inject_amount(doses_administered, int(dosage_amount))
+        time.sleep(1)
+        servo.detach()  ## to avoid jittering
+        force_list = []  ## checks if user was still holding in proper position
         for i in range(3):
             force_list.append(FSR_list[i].force_raw())
         if force_list[0] > FORCE_THRESHOLD and force_list[1] > FORCE_THRESHOLD and force_list[2] > FORCE_THRESHOLD:
@@ -232,6 +232,7 @@ def main(dosage_period = 0):
         plt.pause(dosage_period) ### Waits for dosage period.
 
     #### End of autoinjector use - needs refill now.
+    servo.min()  ## resets linear actuator position
     plt.ioff()
     plt.show()
      
