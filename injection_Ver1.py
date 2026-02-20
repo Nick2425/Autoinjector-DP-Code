@@ -1,4 +1,4 @@
-1import math
+import math
 import sys
 import time
 from gpiozero import Servo
