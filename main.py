@@ -65,6 +65,7 @@ def main(dosage_period = 0):
             line = ax[i, 0].plot([], [])[0]
             lines.append(line)
         lines.append(ax[2, 1].plot([], [])[0])
+        ax[2, 1].set_xlabel(f"Relative Time (s)", fontweight="bold")
 
     except:
         print("Error with initial plotting!")
@@ -112,7 +113,9 @@ def main(dosage_period = 0):
         while gate_open == False:
             data_list[3] = update_list(data_list[3], FSR_list[3])
             time_list = generate_time_list(len(data_list[3]))
-
+            lines[3].set_xdata(time_list)
+            lines[3].set_ydata(data_list[3])
+        
             ############# Check the force sensor
             try:
                 if button_sensor.force_raw() > FORCE_THRESHOLD:
@@ -146,8 +149,8 @@ def main(dosage_period = 0):
                 data_list[i] = update_list(data_list[i], FSR_list[i])
                 average = FSR_rolling_average(data_list[i])
                 RA_list.append(average) ##REAPPENDS ROLLING AVERAGE LIST
-            time_list = generate_time_list(len(data_list[0]))
             data_list[3] = update_list(data_list[3], FSR_list[3])
+            time_list = generate_time_list(len(data_list[0]))
 
             #### Compares rolling averages and checks if they are defined or are null
             if RA_list[0] != None and RA_list[1] != None and RA_list[2] != None:
@@ -172,10 +175,6 @@ def main(dosage_period = 0):
                 ax[i,0].relim()  
                 fig.suptitle(f"Sensor and Output Device Data | Press time is {round(time_pressed,2)} s")
 
-            ax[2, 1].set_xlabel(f"Relative Time (s)", fontweight="bold")
-            lines[3].set_xdata(time_list)
-            lines[3].set_ydata(data_list[3])
-        
             fig.canvas.draw()
             fig.canvas.flush_events()
             plt.pause(LOOP_DELAY) 
