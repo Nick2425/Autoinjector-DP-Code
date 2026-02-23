@@ -106,13 +106,10 @@ def main(dosage_period = 0):
 
             ##### RA IS THE SAME AS ROLLING AVERAGE
             RA_list.clear() ### RESETS ROLLING AVERAGE LIST
-            print("----------------------")
             for i in range(3):
                 data_list[i] = update_list(data_list[i], FSR_list[i])
                 average = FSR_rolling_average(data_list[i])
                 RA_list.append(average) ##REAPPENDS ROLLING AVERAGE LIST
-                print(f"Rolling average {i+1} = {average}")
-            print("----------------------")
             print_outputs(True, RA_list, [data_list[0][-1], data_list[1][-1], data_list[2][-1], data_list[3][-1]], time_pressed)
             #### Compares rolling averages and checks if they are defined or are null
             if RA_list[0] != None and RA_list[1] != None and RA_list[2] != None:
@@ -202,12 +199,31 @@ def inject_amount(count, dosage):
 
     
 def print_outputs(pass_title = False, rolling_average_list = ["N/A","N/A","N/A"], force_raw_list = ["N/A","N/A","N/A","N/A"], time_pressed = 0):
-    if pass_title == False:
-        fsr_string = "FSR 1 (raw)\tFSR 1 (avg)\tFSR 2 (raw)\tFSR 2 (avg)\tFSR 3 (raw)\tFSR 3 (avg)\tFSR 4 (raw)\tTime Pressed (s)"
-        print(f"Red LED\tGreen LED\tBuzzer\t{fsr_string}\tServo Motor\tDC Motor")
-    fsr_data_string = f"{force_raw_list[0]}\t{rolling_average_list[0]}\t{force_raw_list[1]}\t{rolling_average_list[1]}\t{force_raw_list[2]}\t{rolling_average_list[2]}\t{force_raw_list[3]}\t{time_pressed}"
-    print(f"{on_off_mapping(create_objects.RED_LED.is_active)}\t{on_off_mapping(create_objects.GREEN_LED.is_active)}\t{on_off_mapping(create_objects.Buzzer.is_active)}\t{fsr_data_string}\t{rotate_mapping(create_objects.SERVO.is_active)}\t{rotate_mapping(create_objects.DC_MOTOR.is_active)}")
-    
+    if pass_title != True:
+        titles = ["Red LED", "Green LED", "Buzzer", "FSR 1 (raw)", "FSR 1 (avg)", "FSR 2 (raw)", "FSR 2 (avg)", "FSR 3 (raw)", "FSR 3 (avg)", "FSR 4 (raw)", "Servo Motor", "DC Motor"]
+        string = ""
+        for i in titles:
+            string += f"{i:<15}"
+        print(string)
+    data = [on_off_mapping(create_objects.RED_LED.is_active), 
+            on_off_mapping(create_objects.GREEN_LED.is_active), 
+            on_off_mapping(create_objects.Buzzer.is_active), 
+            force_raw_list[0],
+            rolling_average_list[0], 
+            force_raw_list[1],
+            rolling_average_list[1], 
+            force_raw_list[2],
+            rolling_average_list[2], 
+            force_raw_list[3],
+            time_pressed,
+            rotate_mapping(create_objects.SERVO.is_active),
+            rotate_mapping(create_objects.DC_MOTOR.is_active)]
+    string = ""
+    for i in data:
+        string += f"{str(i):<15}"
+    print(string)
+
+
 def on_off_mapping(active):
     if active == True:
         return "On"
