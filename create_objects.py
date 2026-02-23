@@ -27,6 +27,6 @@ GREEN_LED = LED(GREEN_LED_PIN)
 RED_LED = LED(RED_LED_PIN)
 BUZZER = Buzzer(BUZZER_PIN)
 DC_MOTOR = Motor(forward=DC_MOTOR_PIN[0], backward=DC_MOTOR_PIN[1])
-SERVO: Servo = Servo(SERVO_PIN, initial_value=-1 min_pulse_width=0.00055, max_pulse_width=0.00235)
+SERVO = Servo(SERVO_PIN, initial_value=-1, min_pulse_width=0.00055, max_pulse_width=0.00235)
 
 FSR = Force_Sensing_Resistor(BUTTON_PIN)
