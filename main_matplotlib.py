@@ -16,8 +16,18 @@ SYRINGE_VOLUME = 10 ## PLACEHOLDER
 
 
 def main(dosage_period = 0):
-    
+    #### THIS ASSIGNS OBJECTS TO VARIABLES
+    green_led = create_objects.GREEN_LED
+    red_led = create_objects.RED_LED
+    buzzer = create_objects.BUZZER
+    dc_motor = create_objects.DC_MOTOR
+    servo = create_objects.SERVO
+    button_sensor = create_objects.FSR
     dosage_amount = 0
+
+    servo.detach()
+
+
     ### Each return statement after main ensures that main() won't be called continuously.
     ###### INPUT INFORMATION BY DOCTOR ########
     if dosage_period == 0:
@@ -44,14 +54,6 @@ def main(dosage_period = 0):
     ### ESTABLISHES AMOUNT OF DOSES AND PERIOD
     dosage_amount = int(dosage_amount)
     dosage_period = int(dosage_period)
-
-    #### THIS ASSIGNS OBJECTS TO VARIABLES
-    green_led = create_objects.GREEN_LED
-    red_led = create_objects.RED_LED
-    buzzer = create_objects.BUZZER
-    dc_motor = create_objects.DC_MOTOR
-    servo = create_objects.SERVO
-    button_sensor = create_objects.FSR
 
     ### MATPLOB LIB CONFIGURATION
     plt.ion()
@@ -91,6 +93,7 @@ def main(dosage_period = 0):
     while doses_administered < dosage_count:
 
         ######### initialize gate, graphs and LEDs
+        red_led.off()
         gate_open = False
         green_led.on()
         
@@ -320,5 +323,4 @@ def inject_amount(count, dosage):
   distance = ((current_amount / injection.CONVER_CONSTANT)*(2/1.7))-1
   return distance
 
-    
 

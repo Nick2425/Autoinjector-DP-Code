@@ -2,7 +2,7 @@ import time
 import simulate_force_sensors as rvs
 import matplotlib.pyplot as plt
 
-LOOP_DELAY = 0.01
+LOOP_DELAY = 0.05
 FORCE_THRESHOLD = 200
 HOLD_TIME = 3
 
@@ -238,10 +238,10 @@ def update_list(inputed_list, sensor):
 ### GENERATES A LIST OF TIMES DISPLAYED ON THE PLOT
 def generate_time_list(n: int):
     time = []
-    element = 5*LOOP_DELAY * -1*n
+    element = LOOP_DELAY * -1*n
     for i in range(n):
         time.append(element)
-        element += 5*LOOP_DELAY
+        element += LOOP_DELAY
     return time
 
 ####### ROLLING AVERAGE CODE COPIED
