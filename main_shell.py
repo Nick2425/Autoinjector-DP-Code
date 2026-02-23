@@ -2,10 +2,7 @@ import create_objects
 import gate
 import rolling_average as rv
 from sensor_library import *
-from gpiozero import Buzzer
-from gpiozero import Motor
-from gpiozero import Servo
-from gpiozero import LED
+import rolling_average
 import injection
 
 LOOP_DELAY = 0.5
@@ -108,13 +105,10 @@ def main(dosage_period = 0):
         ## Incorporate rolling average code here.
 
         while above_threshold != True:
-
             ##### RA IS THE SAME AS ROLLING AVERAGE
-            RA_list.clear() ### RESETS ROLLING AVERAGE LIST
             for i in range(3):
-                data_list[i] = update_list(data_list[i], FSR_list[i])
-                average = FSR_rolling_average(data_list[i])
-                RA_list.append(average) ##REAPPENDS ROLLING AVERAGE LIST
+                data_list[i] = rolling_average.update_list(data_list[i], FSR_list[i])
+                RA_list[i] = rolling_average.FSR_rolling_average(data_list[i])
             print_outputs(True, RA_list, [data_list[0][-1], data_list[1][-1], data_list[2][-1], button_sensor.force_raw()], time_pressed)
             #### Compares rolling averages and checks if they are defined or are null
             if RA_list[0] != None and RA_list[1] != None and RA_list[2] != None:
@@ -178,23 +172,6 @@ def main(dosage_period = 0):
 
 
 
-####### THIS UPDATES THE STORED FORCE VALUES IN THE LIST AFTER REACHING MAXIMUM CAPACITY
-def update_list(inputed_list, sensor: Force_Sensing_Resistor):
-    updated_list = inputed_list.copy()
-    if len(updated_list) < 150: ### stores elements up to 150
-        updated_list.append(sensor.force_raw())
-    else:
-        updated_list.pop(0)
-        updated_list.append(sensor.force_raw())
-    return updated_list
-
-####### ROLLING AVERAGE CODE COPIED
-def FSR_rolling_average(datalist):
-  if len(datalist) < 30:
-    return None
-  else:
-    rolling_av = sum(datalist, -30)/30 #### Returns the rolling average of the latest 30 elements.
-    return round(rolling_av, 2)
 
 ### CALCULATES SEVRO MOTOR PUSH DISTANCE
 def inject_amount(count, dosage):
