@@ -129,7 +129,7 @@ def main(dosage_period = 0):
 
         ##### BEGIN INJECTION HERE
 
-        servo.value = inject_amount(doses_administered, int(dosage_amount))
+        servo.value = inject_amount(doses_administered, dosage_amount)
         print_outputs(True, RA_list, [data_list[0][-1], data_list[1][-1], data_list[2][-1], button_sensor.force_raw()], time_pressed)
         time.sleep(1)
         servo.detach()  ## to avoid jittering
