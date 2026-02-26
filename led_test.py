@@ -12,3 +12,7 @@ def test_led():
     GREEN_LED.on()
     time.sleep(5)
     RED_LED.on()
+
+    time.sleep(2)
+    GREEN_LED.off()
+    RED_LED.off()

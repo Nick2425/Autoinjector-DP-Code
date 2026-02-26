@@ -2,7 +2,6 @@ import create_objects
 import gate
 import rolling_average as rv
 from sensor_library import *
-import rolling_average
 import injection
 
 LOOP_DELAY = 0.5
@@ -106,9 +105,12 @@ def main(dosage_period = 0):
 
         while above_threshold != True:
             ##### RA IS THE SAME AS ROLLING AVERAGE
-            for i in range(3):
-                data_list[i] = rolling_average.update_list(data_list[i], FSR_list[i])
-                RA_list[i] = rolling_average.FSR_rolling_average(data_list[i])
+            i = 0
+            while i < 3:
+                print(i)
+                data_list[i] = rv.update_list(data_list[i], FSR_list[i])
+                RA_list[i] = rv.FSR_rolling_average(data_list[i])
+                i+=1
             print_outputs(True, RA_list, [data_list[0][-1], data_list[1][-1], data_list[2][-1], button_sensor.force_raw()], time_pressed)
             #### Compares rolling averages and checks if they are defined or are null
             if RA_list[0] != None and RA_list[1] != None and RA_list[2] != None:
