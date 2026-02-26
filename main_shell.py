@@ -4,6 +4,7 @@ import rolling_average as rv
 from sensor_library import *
 import injection
 
+### Defines Global Constants
 LOOP_DELAY = 0.5
 FORCE_THRESHOLD = 100
 HOLD_TIME = 3
@@ -17,6 +18,8 @@ def main(dosage_period = 0):
     servo = create_objects.SERVO
     button_sensor = create_objects.FSR
     servo.detach()
+
+    ### Doctor inputs amount of medication per delivery & length of wait time in between deliveries
     dosage_amount = 0
     if dosage_period == 0:
         try: 
