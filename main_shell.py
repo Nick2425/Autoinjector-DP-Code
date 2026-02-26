@@ -70,7 +70,7 @@ def main(dosage_period = 0):
         time.sleep(0.4)
         print_outputs(True)
         buzzer.off()
-        ###################33
+        ###################
         print_outputs(True)
 
         data_list = [[0],[0],[0]]   #### EMPTY DATA SETS
