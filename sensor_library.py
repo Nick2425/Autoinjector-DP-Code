@@ -105,14 +105,16 @@ class Force_Sensing_Resistor(object):
         self.A2 = 0x42
         self.A3 = 0x43
         self.pin = pin
-        self.bus = smbus.SMBus(i2c_ch)
+        
+        # Shared I2C bus for multiple FSR objects
+        if not hasattr(Force_Sensing_Resistor, "_bus"):
+            Force_Sensing_Resistor._bus = smbus.SMBus(i2c_ch)
+        self.bus = Force_Sensing_Resistor._bus
 
     def force_raw(self):
         if self.pin == 0:
             self.bus.write_byte(self.address,self.A0)
         elif self.pin == 1:
-            address = 0x48
-            A1 = 0x41
             self.bus.write_byte(self.address,self.A1)
         elif self.pin == 2:
             self.bus.write_byte(self.address,self.A2)
@@ -121,7 +123,10 @@ class Force_Sensing_Resistor(object):
         else:
             print("Incorrect value.  Pin defaulted to 0")
             self.bus.write_byte(self.address,self.A0)
-        self.value = self.bus.read_byte(self.address)
+        
+        # PCF8591 returns previous channel, so do a dummy read first
+        self.bus.read_byte(self.address)           # dummy read (discard)
+        self.value = self.bus.read_byte(self.address)  # actual value
         return self.value
 
     def force_scaled(self,scale=5):
@@ -182,6 +187,7 @@ class Heart_Rate_Sensor(object):
         self.data_effect = True
         self.bpm_value = -1
         self.max_heartpulse_duty = 2000
+        pulse_list = []
 
     def sum_bpm(self):
         if self.data_effect:
@@ -189,6 +195,9 @@ class Heart_Rate_Sensor(object):
         self.data_effect = True
 
     def interrupt(self,null):
+        current_time = self.time.time()
+        pulse_list.append(current_time)
+        
         self.temp[self.counter] = self.millis()
         if self.counter == 0:
             self.sub = self.temp[self.counter]-self.temp[self.numberOfBeats]
@@ -215,6 +224,10 @@ class Heart_Rate_Sensor(object):
 
     def heart_rate(self):
         return int(self.bpm_value)
+        
+    def pulse_list(self):
+        
+        return pulse_list
 
 
         
@@ -356,4 +369,3 @@ class Gas_Sensor(object):
         c = pow(ratio1, -1.552) * 1.622
         return c
         
-
