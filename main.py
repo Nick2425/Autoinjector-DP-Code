@@ -1,5 +1,4 @@
 import create_objects
-import gate
 import rolling_average as rv
 from sensor_library import *
 import injection
@@ -9,6 +8,8 @@ DATA_POINT_DELAY = 0.5
 FORCE_THRESHOLD = 100
 HOLD_TIME = 3
 SYRINGE_VOLUME = 10 
+DC_MOTOR_RUNTIME = 0.4
+DC_MOTOR_SPEED = 0.5
 
 def main(time_between_doses = 0):
     green_led = create_objects.GREEN_LED
@@ -16,7 +17,7 @@ def main(time_between_doses = 0):
     buzzer = create_objects.BUZZER
     dc_motor = create_objects.DC_MOTOR
     servo = create_objects.SERVO
-    button_sensor = create_objects.FSR
+    button_sensor = create_objects.BUTTON_FSR
     servo.detach()
 
     ### Doctor inputs amount of medication per delivery & length of wait time in between deliveries
@@ -63,9 +64,9 @@ def main(time_between_doses = 0):
                 if button_sensor.force_raw() > FORCE_THRESHOLD:
                     is_sliding_cover_open = True
                     green_led.off()
-                    dc_motor.forward(speed=gate.SPEED)
+                    dc_motor.forward(speed=DC_MOTOR_SPEED)
                     print_outputs(True, rolling_average_list, [raw_force_values[0][-1], raw_force_values[1][-1], raw_force_values[2][-1], button_sensor.force_raw()])
-                    time.sleep(gate.TIME)
+                    time.sleep(DC_MOTOR_RUNTIME)
                     dc_motor.stop()
                     print_outputs(True, rolling_average_list, [raw_force_values[0][-1], raw_force_values[1][-1], raw_force_values[2][-1], button_sensor.force_raw()])
             except Exception as e:   ### Accounts for potential errors in DC Motor movement including inability to rotate due to a blockage
@@ -89,7 +90,6 @@ def main(time_between_doses = 0):
                     if contact_time > 0:        
                         contact_time = 0        
             time.sleep(DATA_POINT_DELAY) 
-            rv.time_passed += DATA_POINT_DELAY
 
         ### code below begins delivery of medication
         servo.value = inject_amount(doses_delivered, medication_volume_per_delivery)
@@ -107,18 +107,18 @@ def main(time_between_doses = 0):
         print_outputs(True, rolling_average_list, check_raw_force_list, contact_time)
         time.sleep(3)  ## gives user time to remove injector from the dock before the cover closes
         try:
-            dc_motor.backward(speed=gate.SPEED)
-            print_outputs(True, rolling_average_list, check_raw_force_list_2, contact_time)
-            time.sleep(gate.TIME)
+            dc_motor.backward(speed=DC_MOTOR_SPEED)
+            print_outputs(True, rolling_average_list, check_raw_force_list, contact_time)
+            time.sleep(DC_MOTOR_RUNTIME)
             dc_motor.stop()
-            print_outputs(True, rolling_average_list, check_raw_force_list_2, contact_time)
+            print_outputs(True, rolling_average_list, check_raw_force_list, contact_time)
         except Exception as e: ### Accounts for potential errors in DC Motor movement including inability to rotate when injector is still in contact with the dock
             print(f"An unexpected error occured: {e}")
         finally:
             pass
         doses_delivered += 1
         red_led.on()
-        print_outputs(True, rolling_average_list, check_raw_force_list_2, contact_time)
+        print_outputs(True, rolling_average_list, check_raw_force_list, contact_time)
         time.sleep(time_between_doses)  
     ### code below resets the device once all meedication in the injector has been delivered
     servo.min()  ## resets syringe push position 
@@ -134,7 +134,7 @@ def inject_amount(count, dosage):
   distance = ((current_amount / injection.CONVER_CONSTANT)*(2/1.7))-1
   return distance
 
-### PRINTS THE OUTPUTS OF THE PROGRAM IN AN ORDERED FASHION
+### PRINTS THE OUTPUTS OF THE PROGRAM IN AN ORDERED FASHION -- THERE IS NO ROLLING AVERAGE FOR FORCE SENSING RESISTOR 4
 def print_outputs(pass_title = False, rolling_average_list = [None,None,None], force_raw_list = [None,None,None,None], contact_time = 0):
     if pass_title != True:
         titles = ["Red LED", 
@@ -173,14 +173,14 @@ def print_outputs(pass_title = False, rolling_average_list = [None,None,None], f
     print(string)
 
 
-### THIS CONVERTS TRUE OR FALSE STATEMENTS INTO ON OR OFF STRINGS FOR OUR LEDS
+### THIS CONVERTS TRUE OR FALSE STATEMENTS INTO ON OR OFF STRINGS FOR OUR LEDS FOR OUTPUT PURPOSES
 def on_off_mapping(active):
     if active == True:
         return "On"
     else:
         return "Off"
     
-### THIS CONVERTS TRUE OR FALSE STATEMENTS INTO ROTATING OR OFF STRINGS FOR OUR MOTORS
+### THIS CONVERTS TRUE OR FALSE STATEMENTS INTO ROTATING OR OFF STRINGS FOR OUR MOTORS FOR OUTPUT PURPOSES
 def rotate_mapping(active):
     if active == True:
         return "Rotating"

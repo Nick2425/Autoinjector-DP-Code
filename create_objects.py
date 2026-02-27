@@ -15,7 +15,7 @@ from sensor_library import *
 import time
 import sys
 
-# NUMBERS BELOW ARE PLACEHOLDERS
+
 GREEN_LED_PIN = 21
 RED_LED_PIN = 20
 BUZZER_PIN = 5
@@ -29,4 +29,4 @@ BUZZER = Buzzer(BUZZER_PIN)
 DC_MOTOR = Motor(forward=DC_MOTOR_PIN[0], backward=DC_MOTOR_PIN[1])
 SERVO = Servo(SERVO_PIN, initial_value=-1, min_pulse_width=0.00055, max_pulse_width=0.00235)
 
-FSR = Force_Sensing_Resistor(BUTTON_PIN)
+BUTTON_FSR = Force_Sensing_Resistor(BUTTON_PIN)

@@ -1,6 +1,6 @@
 import create_objects 
 import time
-import gate
+import sliding_cover_test
 import rolling_average as rv
 import matplotlib.pyplot as plt
 from sensor_library import *
@@ -134,7 +134,7 @@ def main(dosage_period = 0):
                     gate_open = True
                     green_led.off()
                     #buzzer.off()
-                    gate.open(dc_motor, open=True)
+                    sliding_cover_test.open(dc_motor, open=True)
             except:
                 print("Error opening the gate")
 
@@ -215,7 +215,7 @@ def main(dosage_period = 0):
         plt.pause(5)
         ##### Close the gate
         try:
-            gate.open(dc_motor, open=False)
+            sliding_cover_test.open(dc_motor, open=False)
         except:
             print("Error closing the gate")
 

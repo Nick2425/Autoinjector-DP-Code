@@ -1,12 +1,11 @@
 import time
 from gpiozero import Motor
 
-# TIME CALCULATIONS NECESSARY FROM GEAR TRAIN
-TORQUE = 2.75/100 # 0.00275 Kg*M
-RPM = 80 # revolutions per minute
-TIME = 5
+TIME = 0.4
 SPEED = 0.5
 
+
+### This function uses the DC Motor to open the cover
 def open(motor_object: Motor, open = True):
     if open == True:
         motor_object.forward(speed=SPEED)
